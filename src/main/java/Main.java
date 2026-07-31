@@ -6,5 +6,11 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
         System.out.println(command + ": command not found");
+        while (!command.equals("exit")) {
+            System.out.print("$ ");
+            command = input.nextLine();
+            System.out.println(command + ": command not found");
+        }
+        System.out.println(command + ": shelljava is closed");
     }
 }
