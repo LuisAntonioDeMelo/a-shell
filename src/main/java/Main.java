@@ -1,3 +1,6 @@
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,17 +15,31 @@ public class Main {
                 break;
             }
             else if(command.startsWith("type")) {
-                List<String> commands = Arrays.asList("type", "echo", "exit");
-                boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(command.substring(5)));
-                if(!existComand){
-                    System.out.println(command.substring(5) + ": not found");
+                String cmdSubtype = command.substring(5);
+                List<String> commands = Arrays.asList("type", "echo", "exit", "grep");
+                boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(cmdSubtype));
+                boolean existtype = false;
+                String path = System.getenv("PATH");
+                String[] pathDirs = path.split(":");
+                for(String dir : pathDirs){
+                    File dirFile = new File(dir);
+                    if(dirFile.isDirectory()){
+                        System.out.println( cmdSubtype + " is " + dirFile.getAbsolutePath());
+                    }
                 }
-                else {
-                    System.out.println(command.substring(5) + " is a shell builtin");
+                if(existComand){
+                    System.out.println(cmdSubtype + " is a shell builtin");
+                }else {
+                    System.out.println( cmdSubtype+ ": not found");
                 }
+
             }
             else if(command.startsWith("echo ")){
                 System.out.println(command.substring(5));
+            }
+            else if(command.startsWith("grep ")){
+               // System.out.println(command.substring(5));
+
             }
             else {
                 System.out.println(command + ": command not found");
