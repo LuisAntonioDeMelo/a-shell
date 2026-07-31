@@ -57,44 +57,32 @@ public class Main {
                 process.waitFor();
             }
             else if (command.startsWith("pwd")) {
-                String pwd = Paths.get("").toAbsolutePath().toString();
+                String pwd = diretorioAtual.toAbsolutePath().toString();
                 System.out.println(pwd);
             }
             else if (command.equals("cd") || command.startsWith("cd ")) {
                 String destino;
-
-                // "cd" sem argumento vai para a pasta do usuário
                 if (command.equals("cd")) {
                     destino = System.getProperty("user.home");
                 } else {
                     destino = command.substring(3).trim();
                 }
-
                 Path novoDiretorio;
-
-                // Suporte para "cd ~"
                 if (destino.equals("~")) {
                     novoDiretorio = Paths.get(System.getProperty("user.home"));
                 } else {
                     Path caminhoInformado = Paths.get(destino);
-
-                    // Caminho absoluto: cd /home/luis
                     if (caminhoInformado.isAbsolute()) {
                         novoDiretorio = caminhoInformado;
                     } else {
-                        // Caminho relativo: cd projetos, cd .., cd ./src
                         novoDiretorio = diretorioAtual.resolve(caminhoInformado);
                     }
                 }
-
                 novoDiretorio = novoDiretorio.toAbsolutePath().normalize();
-
                 if (Files.isDirectory(novoDiretorio)) {
                     diretorioAtual = novoDiretorio;
                 } else {
-                    System.out.println(
-                            "cd: " + destino + ": No such file or directory"
-                    );
+                    System.out.println("cd: " + destino + ": No such file or directory");
                 }
             }
         }
