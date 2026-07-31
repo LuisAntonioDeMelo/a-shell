@@ -46,15 +46,9 @@ public class Main {
             } else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
             } else if (obterComandoPath(cmdArray[0]) != null) {
-                try {
-                    Process process = new ProcessBuilder(command)
-                            .start();
-                    process.getInputStream().transferTo(System.out);
-                    process.waitFor();
-                } catch (Exception e) {
-                    System.out.println(obterComandoPath(cmdArray[0]));;
-                    System.out.println(e.getMessage());
-                }
+                Process process = Runtime.getRuntime().exec(cmdArray);
+                process.getInputStream().transferTo(System.out);
+                process.waitFor();
             } else {
                 System.out.println(command + ": command not found");
             }
