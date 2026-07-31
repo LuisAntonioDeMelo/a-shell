@@ -3,6 +3,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -17,11 +18,9 @@ public class Main {
             String[] cmdArray = command.split(" ");
             if (command.equals("exit")) {
                 break;
-            }
-            else if(command.equals("help")) {
+            } else if (command.equals("help")) {
                 //nao implementado ainda
-            }
-            else if (command.startsWith("type")) {
+            } else if (command.startsWith("type")) {
                 String cmdSubtype = command.substring(5);
                 String output = "";
 
@@ -42,22 +41,21 @@ public class Main {
                     output = cmdSubtype + " is a shell builtin";
                 }
                 System.out.println(output);
-            }
-            else if (command.startsWith("echo ")) {
+            } else if (command.startsWith("echo ")) {
                 System.out.println(command.substring(5));
-            }
-            else if (command.startsWith("grep ")) {
+            } else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
-            }
-            else if(obterComandoPath(cmdArray[0]) != null) {
+            } else if (obterComandoPath(cmdArray[0]) != null) {
                 try {
-                    Process process = new ProcessBuilder(command).start();
+                    Process process = new ProcessBuilder(command)
+                            .directory(new File(Objects.requireNonNull(obterComandoPath(cmdArray[0]))))
+                            .start();
                     process.getInputStream().transferTo(System.out);
                     process.waitFor();
-                }catch (Exception e) {
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 System.out.println(command + ": command not found");
             }
         }
@@ -65,7 +63,7 @@ public class Main {
 
     private static String obterComandoPath(String command) {
         String pathEvn = System.getenv("PATH");
-        if(pathEvn == null) {
+        if (pathEvn == null) {
             return null;
         }
         String[] pathDirs = pathEvn.split(File.pathSeparator);
