@@ -50,10 +50,12 @@ public class Main {
                 // System.out.println(command.substring(5));
             }
             else if(obterComandoPath(cmdArray[0]) != null) {
-
-                Process process = new ProcessBuilder(command).start();
-                process.getInputStream().transferTo(System.out);
-                process.waitFor();
+                try {
+                    Process process = new ProcessBuilder(command).start();
+                    process.getInputStream().transferTo(System.out);
+                    process.waitFor();
+                }catch (Exception e) {
+                }
             }
             else {
                 System.out.println(command + ": command not found");
