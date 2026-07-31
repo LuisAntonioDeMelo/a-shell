@@ -11,6 +11,9 @@ public class Main {
             command = input.nextLine();
             System.out.println(command + ": command not found");
         }
-        System.out.println(command + ": shelljava is closed");
+        if(input.equals("exit")) {
+            System.exit(0);
+        }
+        System.out.println(command);
     }
 }
