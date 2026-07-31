@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        System.out.print("$ ");
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
         while (!command.equals("exit")) {
             System.out.print("$ ");
+
             command = input.nextLine();
             if(command.equals("exit")){
                 break;
