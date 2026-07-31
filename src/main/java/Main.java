@@ -9,6 +9,9 @@ public class Main {
             if(command.equals("exit")){
                 break;
             }
+            else if(command.startsWith("type") && command.length()>4) {
+                System.out.println(command.substring(5) + " is a shell builtin");
+            }
             else if(command.startsWith("echo ")){
                 System.out.println(command.substring(5));
             }
