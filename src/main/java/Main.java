@@ -52,6 +52,7 @@ public class Main {
                     process.getInputStream().transferTo(System.out);
                     process.waitFor();
                 } catch (Exception e) {
+                    System.out.println(obterComandoPath(cmdArray[0]));;
                     System.out.println(e.getMessage());
                 }
             } else {
