@@ -49,12 +49,17 @@ public class Main {
                 Process process = Runtime.getRuntime().exec(cmdArray);
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
-            } else {
+            } else  if(command.startsWith("pwd ")) {
+              String pwd = Paths.get("").toAbsolutePath().toString();
+              System.out.println(pwd);
+            }
+            else {
                 System.out.println(command + ": command not found");
             }
         }
     }
 
+    //verifica se o caminho é existente
     private static String obterComandoPath(String command) {
         String pathEvn = System.getenv("PATH");
         if (pathEvn == null) {
