@@ -48,7 +48,6 @@ public class Main {
             } else if (obterComandoPath(cmdArray[0]) != null) {
                 try {
                     Process process = new ProcessBuilder(command)
-                            .directory(new File(Objects.requireNonNull(obterComandoPath(cmdArray[0]))))
                             .start();
                     process.getInputStream().transferTo(System.out);
                     process.waitFor();
