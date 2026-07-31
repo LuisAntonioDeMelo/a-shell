@@ -21,8 +21,9 @@ public class Main {
                 //nao implementado ainda
             }
             else if(command.startsWith("custom_exe")) {
-                String cmdSubtype = command.substring(5);
-                Process process = Runtime.getRuntime().exec(cmdSubtype);
+                ProcessBuilder pb = new ProcessBuilder(command, "/c", command.split(" ")[1]);
+                pb.directory(new File(pathDirs[0]));
+                Process process = pb.start();
                 System.out.println(process);
                 process.waitFor();
             }
