@@ -18,9 +18,11 @@ public class Main {
             String[] cmdArray = command.split(" ");
             if (command.equals("exit")) {
                 break;
-            } else if (command.equals("help")) {
+            }
+            else if (command.equals("help")) {
                 //nao implementado ainda
-            } else if (command.startsWith("type")) {
+            }
+            else if (command.startsWith("type")) {
                 String cmdSubtype = command.substring(5);
                 String output = "";
 
@@ -41,18 +43,23 @@ public class Main {
                     output = cmdSubtype + " is a shell builtin";
                 }
                 System.out.println(output);
-            } else if (command.startsWith("echo ")) {
+            }
+            else if (command.startsWith("echo ")) {
                 System.out.println(command.substring(5));
-            } else if (command.startsWith("grep ")) {
+            }
+            else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
-            } else if (obterComandoPath(cmdArray[0]) != null) {
+            }
+            else if (obterComandoPath(cmdArray[0]) != null) {
                 Process process = Runtime.getRuntime().exec(cmdArray);
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
-            } else if (command.startsWith("pwd ")) {
-                String pwd = Paths.get("").toAbsolutePath().toString();
+            }
+            else if (command.startsWith("pwd ")) {
+                String pwd = System.getProperty("user.dir");
                 System.out.println(pwd);
-            } else {
+            }
+            else {
                 System.out.println(command + ": command not found");
             }
         }
