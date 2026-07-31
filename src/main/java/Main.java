@@ -5,14 +5,13 @@ public class Main {
         System.out.print("$ ");
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
-        System.out.println(command + ": command not found");
         while (!command.equals("exit")) {
             System.out.print("$ ");
             command = input.nextLine();
+            if(command.equals("exit")){
+                break;
+            }
             System.out.println(command + ": command not found");
-        }
-        if(input.equals("exit")) {
-            System.exit(0);
         }
         System.out.println(command);
     }
