@@ -1,9 +1,9 @@
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -16,6 +16,8 @@ public class Main {
             System.out.print("$ ");
             String command = input.nextLine();
             String[] cmdArray = command.split(" ");
+            Path diretorioAtual = Paths.get(System.getProperty("user.dir"));
+
             if (command.equals("exit")) {
                 break;
             }
@@ -58,6 +60,21 @@ public class Main {
             else if (command.startsWith("pwd")) {
                 String pwd = Paths.get("").toAbsolutePath().toString();
                 System.out.println(pwd);
+            }
+            else if (command.startsWith("cd")) {
+                String cd = command.substring(3);
+                Path novoDiretorio = diretorioAtual.resolve(cd);
+                if(cd.equals("~")) {
+                     novoDiretorio = diretorioAtual.resolve("/");
+                }
+                File pasta = novoDiretorio.toFile();
+
+                if (pasta.exists() && pasta.isDirectory()) {
+                     diretorioAtual = novoDiretorio;
+                }
+                else{
+                    System.out.println("Not found");
+                }
             }
             else {
                 System.out.println(command + ": command not found");
