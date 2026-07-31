@@ -11,14 +11,12 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String path = System.getenv("PATH");
         String[] pathDirs = path.split(":");
-
-        Path currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+        Path diretorioAtual = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
 
         while (true) {
             System.out.print("$ ");
             String command = input.nextLine();
             String[] cmdArray = command.split(" ");
-
             if (command.equals("exit")) {
                 break;
             }
@@ -62,36 +60,15 @@ public class Main {
                 String pwd = Paths.get("").toAbsolutePath().toString();
                 System.out.println(pwd);
             }
-            else if (command.equals("cd") || command.startsWith("cd ")) {
-                String pathdir;
-                if (command.equals("cd")) {
-                    pathdir = System.getProperty("user.home");
+            else if (command.startsWith("cd")) {
+                String result = command.substring(3);
+                File file = new File(result);
+                if(file.isDirectory() && file.isAbsolute()) {
+                    diretorioAtual = Paths.get(file.getCanonicalPath()).toAbsolutePath().normalize();
+                    System.out.println(diretorioAtual);
                 }else {
-                    pathdir =  command.substring(3).trim();
+                    System.out.println("cd :" + result + ": No such file or director");
                 }
-                Path newDir;
-                if (pathdir.equals("~")) {
-                    newDir = Paths.get(System.getProperty("user.home"));
-                }else {
-                    Path informedPath = Paths.get(pathdir);
-                    if(informedPath.isAbsolute()){
-                        newDir = informedPath;
-                    }else {
-                        newDir = currentDirectory.resolve(pathdir);
-                    }
-                }
-                newDir =  newDir.toAbsolutePath().normalize();
-
-                if (newDir.toFile().isDirectory()) {
-                    currentDirectory = newDir;
-                } else {
-                    System.out.println(
-                            "cd: " + pathdir + ": No such file or directory"
-                    );
-                }
-            }
-            else {
-                System.out.println(command + ": command not found");
             }
         }
     }
