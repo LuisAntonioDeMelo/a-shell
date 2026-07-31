@@ -14,7 +14,7 @@ public class Main {
         while (true) {
             System.out.print("$ ");
             String command = input.nextLine();
-            String[] cmd = command.split(" ");
+            String[] cmdArray = command.split(" ");
             if (command.equals("exit")) {
                 break;
             }
@@ -49,7 +49,7 @@ public class Main {
             else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
             }
-            else if(obterComandoPath(cmd[0]) != null) {
+            else if(obterComandoPath(cmdArray[0]) != null) {
 
                 Process process = new ProcessBuilder(command).start();
                 process.getInputStream().transferTo(System.out);
