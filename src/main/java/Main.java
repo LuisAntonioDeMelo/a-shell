@@ -16,7 +16,7 @@ public class Main {
             System.out.print("$ ");
             String command = input.nextLine();
             String[] cmdArray = command.split(" ");
-            Path diretorioAtual = Paths.get(System.getProperty("user.dir"));
+            String diretorioAtual = System.getProperty("user.dir");
 
             if (command.equals("exit")) {
                 break;
@@ -28,7 +28,7 @@ public class Main {
                 String cmdSubtype = command.substring(5);
                 String output = "";
 
-                List<String> commands = Arrays.asList("type", "echo", "exit", "grep", "pwd");
+                List<String> commands = Arrays.asList("type", "echo", "exit", "grep", "pwd", "cd");
                 boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(cmdSubtype));
 
                 if (!existComand) {
@@ -62,18 +62,12 @@ public class Main {
                 System.out.println(pwd);
             }
             else if (command.startsWith("cd")) {
-                String cd = command.substring(3);
-                Path novoDiretorio = diretorioAtual.resolve(cd);
-                if(cd.equals("~")) {
-                     novoDiretorio = diretorioAtual.resolve("/");
-                }
-                File pasta = novoDiretorio.toFile();
-
-                if (pasta.exists() && pasta.isDirectory()) {
-                     diretorioAtual = novoDiretorio;
-                }
-                else{
-                    System.out.println("Not found");
+                String result = command.substring(3);
+                File file = new File(result);
+                if(file.isDirectory() && file.isAbsolute()) {
+                    diretorioAtual = file.getAbsolutePath();
+                }else {
+                    System.out.println("cd :" + result + ": No such file or director");
                 }
             }
             else {
