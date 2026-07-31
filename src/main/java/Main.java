@@ -44,10 +44,10 @@ public class Main {
                 }
                 System.out.println(output);
             }
-            else if (command.startsWith("echo ")) {
+            else if (command.startsWith("echo")) {
                 System.out.println(command.substring(5));
             }
-            else if (command.startsWith("grep ")) {
+            else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
             }
             else if (obterComandoPath(cmdArray[0]) != null) {
@@ -55,8 +55,8 @@ public class Main {
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
             }
-            else if (command.startsWith("pwd ")) {
-                String pwd = System.getProperty("user.dir");
+            else if (command.startsWith("pwd")) {
+                String pwd = Paths.get("").toAbsolutePath().toString();
                 System.out.println(pwd);
             }
             else {
