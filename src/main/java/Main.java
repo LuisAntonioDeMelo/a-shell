@@ -24,7 +24,7 @@ public class Main {
                 String cmdSubtype = command.substring(5);
                 String output = "";
 
-                List<String> commands = Arrays.asList("type", "echo", "exit", "grep");
+                List<String> commands = Arrays.asList("type", "echo", "exit", "grep", "pwd");
                 boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(cmdSubtype));
 
                 if (!existComand) {
@@ -49,11 +49,10 @@ public class Main {
                 Process process = Runtime.getRuntime().exec(cmdArray);
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
-            } else  if(command.startsWith("pwd ")) {
-              String pwd = Paths.get("").toAbsolutePath().toString();
-              System.out.println(pwd);
-            }
-            else {
+            } else if (command.startsWith("pwd ")) {
+                String pwd = Paths.get("").toAbsolutePath().toString();
+                System.out.println(pwd);
+            } else {
                 System.out.println(command + ": command not found");
             }
         }
