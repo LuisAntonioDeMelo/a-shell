@@ -21,11 +21,16 @@ public class Main {
                 boolean existtype = false;
                 String path = System.getenv("PATH");
                 String[] pathDirs = path.split(":");
-                for(String dir : pathDirs){
-                    File dirFile = new File(dir);
-                    if(dirFile.isDirectory()){
-                        System.out.println( cmdSubtype + " is " + dirFile.getAbsolutePath());
-                    }
+//                for(String dir : pathDirs){
+//                    File dirFile = new File(dir, existComand);
+//                    if(dirFile.isDirectory()){
+//                        System.out.println( cmdSubtype + " is " + dirFile.getAbsolutePath());
+//                    }
+                for(int i = 0; i < pathDirs.length; i++){
+                 File file = new File(pathDirs[i], cmdSubtype);
+                 if(file.exists() && file.canExecute()){
+                     System.out.println(cmdSubtype + " is " + file.getAbsolutePath());
+                 }
                 }
                 if(existComand){
                     System.out.println(cmdSubtype + " is a shell builtin");
