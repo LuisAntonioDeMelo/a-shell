@@ -20,13 +20,6 @@ public class Main {
             else if(command.equals("help")) {
                 //nao implementado ainda
             }
-            else if(command.startsWith("custom_exe")) {
-                ProcessBuilder pb = new ProcessBuilder(command, "/c", command.split(" ")[1]);
-                pb.directory(new File(pathDirs[0]));
-                Process process = pb.start();
-                System.out.println(process);
-                process.waitFor();
-            }
             else if (command.startsWith("type")) {
                 String cmdSubtype = command.substring(5);
                 String output = "";
@@ -51,12 +44,34 @@ public class Main {
             }
             else if (command.startsWith("echo ")) {
                 System.out.println(command.substring(5));
-            } else if (command.startsWith("grep ")) {
+            }
+            else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
-            } else {
+            }
+            else if(obterComandoPath(command) != null) {
+                Process process = new ProcessBuilder(command).start();
+                process.getInputStream().transferTo(System.out);
+                process.waitFor();
+            }
+            else {
                 System.out.println(command + ": command not found");
             }
         }
+    }
+
+    private static String obterComandoPath(String command) {
+        String pathEvn = System.getenv("PATH");
+        if(pathEvn == null) {
+            return null;
+        }
+        String[] pathDirs = pathEvn.split(File.pathSeparator);
+        for (String pathDir : pathDirs) {
+            File file = new File(pathDir, command);
+            if (file.exists() && file.canExecute()) {
+                return file.getAbsolutePath();
+            }
+        }
+        return null;
     }
 
 }
