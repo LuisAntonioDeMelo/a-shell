@@ -12,11 +12,12 @@ public class Main {
         String path = System.getenv("PATH");
         String[] pathDirs = path.split(":");
 
+        Path currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+
         while (true) {
             System.out.print("$ ");
             String command = input.nextLine();
             String[] cmdArray = command.split(" ");
-            String diretorioAtual = System.getProperty("user.dir");
 
             if (command.equals("exit")) {
                 break;
@@ -61,13 +62,32 @@ public class Main {
                 String pwd = Paths.get("").toAbsolutePath().toString();
                 System.out.println(pwd);
             }
-            else if (command.startsWith("cd")) {
-                String result = command.substring(3);
-                File file = new File(result);
-                if(file.isDirectory() && file.isAbsolute()) {
-                    diretorioAtual = file.getAbsolutePath();
+            else if (command.equals("cd") || command.startsWith("cd ")) {
+                String pathdir;
+                if (command.equals("cd")) {
+                    pathdir = System.getProperty("user.home");
                 }else {
-                    System.out.println("cd :" + result + ": No such file or director");
+                    pathdir =  command.substring(3).trim();
+                }
+                Path newDir;
+                if (pathdir.equals("~")) {
+                    newDir = Paths.get(System.getProperty("user.home"));
+                }else {
+                    Path informedPath = Paths.get(pathdir);
+                    if(informedPath.isAbsolute()){
+                        newDir = informedPath;
+                    }else {
+                        newDir = currentDirectory.resolve(pathdir);
+                    }
+                }
+                newDir =  newDir.toAbsolutePath().normalize();
+
+                if (newDir.toFile().isDirectory()) {
+                    currentDirectory = newDir;
+                } else {
+                    System.out.println(
+                            "cd: " + pathdir + ": No such file or directory"
+                    );
                 }
             }
             else {
