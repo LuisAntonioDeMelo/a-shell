@@ -17,6 +17,15 @@ public class Main {
             if (command.equals("exit")) {
                 break;
             }
+            else if(command.equals("help")) {
+                //nao implementado ainda
+            }
+            else if(command.equals("run")) {
+                String cmdSubtype = command.substring(5);
+                Process process = Runtime.getRuntime().exec(cmdSubtype);
+                System.out.println(process);
+                process.waitFor();
+            }
             else if (command.startsWith("type")) {
                 String cmdSubtype = command.substring(5);
                 String output = "";
@@ -38,7 +47,8 @@ public class Main {
                     output = cmdSubtype + " is a shell builtin";
                 }
                 System.out.println(output);
-            } else if (command.startsWith("echo ")) {
+            }
+            else if (command.startsWith("echo ")) {
                 System.out.println(command.substring(5));
             } else if (command.startsWith("grep ")) {
                 // System.out.println(command.substring(5));
