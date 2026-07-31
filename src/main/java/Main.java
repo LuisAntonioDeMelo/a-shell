@@ -1,3 +1,5 @@
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -9,8 +11,15 @@ public class Main {
             if(command.equals("exit")){
                 break;
             }
-            else if(command.startsWith("type") && command.length()>4) {
-                System.out.println(command.substring(5) + " is a shell builtin");
+            else if(command.startsWith("type")) {
+                List<String> commands = Arrays.asList("type", "echo", "exit");
+                boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(command.substring(5)));
+                if(!existComand){
+                    System.out.println(command.substring(5) + ": not found");
+                }
+                else {
+                    System.out.println(command.substring(5) + " is a shell builtin");
+                }
             }
             else if(command.startsWith("echo ")){
                 System.out.println(command.substring(5));
