@@ -20,7 +20,7 @@ public class Main {
             else if(command.equals("help")) {
                 //nao implementado ainda
             }
-            else if(command.equals("run")) {
+            else if(command.startsWith("custom_exe")) {
                 String cmdSubtype = command.substring(5);
                 Process process = Runtime.getRuntime().exec(cmdSubtype);
                 System.out.println(process);
