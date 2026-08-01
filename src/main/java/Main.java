@@ -76,6 +76,9 @@ public class Main {
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
             }
+            else {
+                System.out.println(command + ": command not found");
+            }
         }
     }
 
