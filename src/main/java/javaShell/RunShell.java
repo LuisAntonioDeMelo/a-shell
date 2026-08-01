@@ -27,6 +27,9 @@ public class RunShell {
             else if (command.equals("help")) {
                 //nao implementado ainda
             }
+            else if (command.equals("ls")) {
+                // nao implementado
+            }
             else if (command.startsWith("type")) {
                 String cmdSubtype = command.substring(5);
                 String output = "";
@@ -50,7 +53,15 @@ public class RunShell {
                 System.out.println(output);
             }
             else if (command.startsWith("echo")) {
-                System.out.println(command.substring(5));
+                String cmd = command.substring(5);
+                if(cmd.startsWith("'")) {
+                    if(cmd.endsWith("'")){
+                        cmd.replaceAll(" ", "");
+                    }
+                    System.out.println(cmd.replaceAll("\'",""));
+                }else {
+                    System.out.println(command.substring(5));
+                }
             }
             else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
