@@ -11,7 +11,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String path = System.getenv("PATH");
         String[] pathDirs = path.split(":");
-        String caminho = System.getProperty("user.dir");
+
 
         while (true) {
             System.out.print("$ ");
@@ -57,6 +57,7 @@ public class Main {
                 process.waitFor();
             }
             else if (command.startsWith("pwd")) {
+                String caminho = System.getProperty("user.dir");
                 System.out.println(caminho);
             }
             else if (command.equals("cd") || command.startsWith("cd")) {
