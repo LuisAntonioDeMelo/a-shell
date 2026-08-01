@@ -58,10 +58,15 @@ public class RunShell {
             else if (command.startsWith("pwd")) {
                 System.out.println(currentDirectory);
             }
-            else if (command.equals("cd") || command.startsWith("cd ")) {
+            else if (command.equals("cd") || command.startsWith("cd")) {
                 String destination = command.equals("cd") ? System.getenv("HOME") : command.substring(3);
                 Path target = Paths.get(destination);
                 if (!target.isAbsolute()) {
+                    target = currentDirectory.resolve(target);
+                }
+                if(command.substring(3).equals("~")) {
+                    destination = System.getenv("HOME");
+                    target = Paths.get(destination);
                     target = currentDirectory.resolve(target);
                 }
                 target = target.normalize();
