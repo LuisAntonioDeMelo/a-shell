@@ -11,7 +11,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String path = System.getenv("PATH");
         String[] pathDirs = path.split(":");
-        Path diretorioAtual = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+        String caminho = System.getProperty("user.dir");
 
         while (true) {
             System.out.print("$ ");
@@ -57,36 +57,19 @@ public class Main {
                 process.waitFor();
             }
             else if (command.startsWith("pwd")) {
-                String pwd = diretorioAtual.toAbsolutePath().toString();
-                System.out.println(pwd);
+                System.out.println(caminho);
             }
             else if (command.equals("cd") || command.startsWith("cd ")) {
-                String destino;
-                if (command.equals("cd")) {
-                    destino = System.getProperty("user.home");
-                } else {
-                    destino = command.substring(3).trim();
+                File file = new File(cmdArray[1] != null ? cmdArray[1] : cmdArray[0]);
+                if (file.exists() && file.canExecute()) {
+                    caminho = file.getAbsolutePath();
                 }
-                Path novoDiretorio;
-                if (destino.equals("~")) {
-                    novoDiretorio = Paths.get(System.getProperty("user.home"));
                 } else {
-                    Path caminhoInformado = Paths.get(destino);
-                    if (caminhoInformado.isAbsolute()) {
-                        novoDiretorio = caminhoInformado;
-                    } else {
-                        novoDiretorio = diretorioAtual.resolve(caminhoInformado);
-                    }
-                }
-                novoDiretorio = novoDiretorio.toAbsolutePath().normalize();
-                if (Files.isDirectory(novoDiretorio)) {
-                    diretorioAtual = novoDiretorio;
-                } else {
-                    System.out.println("cd: " + destino + ": No such file or directory");
+                    System.out.println("cd: " + command + ": No such file or directory");
                 }
             }
         }
-    }
+
 
     //verifica se o caminho é existente
     private static String obterComandoPath(String command) {
