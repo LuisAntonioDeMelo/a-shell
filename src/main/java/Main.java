@@ -59,10 +59,10 @@ public class Main {
             else if (command.startsWith("pwd")) {
                 System.out.println(caminho);
             }
-            else if (command.equals("cd") || command.startsWith("cd ")) {
+            else if (command.equals("cd") || command.startsWith("cd")) {
                 File file = new File(cmdArray[1] != null ? cmdArray[1] : cmdArray[0]);
                 if (file.exists() && file.canExecute()) {
-                    caminho = file.getAbsolutePath();
+                    System.setProperty("user.dir", file.getAbsolutePath());
                 }
                 } else {
                     System.out.println("cd: " + command + ": No such file or directory");
