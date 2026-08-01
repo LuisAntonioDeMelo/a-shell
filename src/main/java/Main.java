@@ -10,7 +10,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner input = new Scanner(System.in);
         String path = System.getenv("PATH");
-        String[] pathDirs = path.split(":");
+        String[] pathDirs = path.split(File.pathSeparator);
+        Path currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
 
 
         while (true) {
@@ -51,25 +52,32 @@ public class Main {
             else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
             }
+            else if (command.startsWith("pwd")) {
+                System.out.println(currentDirectory);
+            }
+            else if (command.equals("cd") || command.startsWith("cd ")) {
+                String destination = command.equals("cd") ? System.getenv("HOME") : command.substring(3);
+                Path target = Paths.get(destination);
+                if (!target.isAbsolute()) {
+                    target = currentDirectory.resolve(target);
+                }
+                target = target.normalize();
+
+                if (Files.isDirectory(target)) {
+                    currentDirectory = target.toAbsolutePath();
+                } else {
+                    System.out.println("cd: " + destination + ": No such file or directory");
+                }
+            }
             else if (obterComandoPath(cmdArray[0]) != null) {
-                Process process = Runtime.getRuntime().exec(cmdArray);
+                ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
+                processBuilder.directory(currentDirectory.toFile());
+                Process process = processBuilder.start();
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
             }
-            else if (command.startsWith("pwd")) {
-                String caminho = System.getProperty("user.dir");
-                System.out.println(caminho);
-            }
-            else if (command.equals("cd") || command.startsWith("cd")) {
-                File file = new File(cmdArray[1] != null ? cmdArray[1] : cmdArray[0]);
-                if (file.exists() && file.canExecute()) {
-                    System.setProperty("user.dir", file.getAbsolutePath());
-                }
-                } else {
-                    System.out.println("cd: " + command + ": No such file or directory");
-                }
-            }
         }
+    }
 
 
     //verifica se o caminho é existente
