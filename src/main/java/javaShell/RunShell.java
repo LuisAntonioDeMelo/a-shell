@@ -55,7 +55,6 @@ public class RunShell {
             }
             else if (command.startsWith("echo")) {
                 String words[]  = command.substring(5).split("'\'");
-                System.out.println(Arrays.toString(words));
                 String join = Arrays.stream(words).collect(Collectors.joining());
                 System.out.println(join.replace("'", ""));
 //          isso aqui nao funciona
