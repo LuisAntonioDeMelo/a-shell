@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -54,21 +55,21 @@ public class RunShell {
                 System.out.println(output);
             }
             else if (command.startsWith("echo")) {
-                String words[]  = command.substring(5).split("'\'");
-                String join = Arrays.stream(words).collect(Collectors.joining());
-                System.out.println(join.replace("'", ""));
-//          isso aqui nao funciona
-
-//                String cmd = command.substring(5);
-//                String output = "";
-//                if(cmd.startsWith("'")) {
-//                    if(cmd.endsWith("'")){
-//                        output = cmd.replaceAll(" ", "");
-//                    }
-//                    System.out.println(output.replaceAll("\'",""));
-//                }else {
-//                    System.out.println(command.substring(5));
-//                }
+                String words[] = command.substring(5).split("'\'");
+                if(words.length < 2) {
+                    String sd[] = words[0].split(" ");
+                    List<String> ls =  new ArrayList<>();
+                    for(int i = 0; i < sd.length; i++) {
+                        if(sd[i]!=null && !sd[i].isEmpty()) {
+                            ls.add(sd[i]);
+                        }
+                    }
+                    System.out.println(ls.stream().collect(Collectors.joining(" ")));
+                }
+                else {
+                    String join = Arrays.stream(words).collect(Collectors.joining());
+                    System.out.println(join.replace("'", ""));
+                }
             }
             else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
