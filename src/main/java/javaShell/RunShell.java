@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class RunShell {
 
@@ -53,16 +54,22 @@ public class RunShell {
                 System.out.println(output);
             }
             else if (command.startsWith("echo")) {
-                String cmd = command.substring(5);
-                String output = "";
-                if(cmd.startsWith("'")) {
-                    if(cmd.endsWith("'")){
-                        output = cmd.replaceAll(" ", "");
-                    }
-                    System.out.println(output.replaceAll("\'",""));
-                }else {
-                    System.out.println(command.substring(5));
-                }
+                String words[]  = command.substring(5).split("'\'");
+                System.out.println(Arrays.toString(words));
+                String join = Arrays.stream(words).collect(Collectors.joining());
+                System.out.println(join.replace("'", ""));
+//          isso aqui nao funciona
+
+//                String cmd = command.substring(5);
+//                String output = "";
+//                if(cmd.startsWith("'")) {
+//                    if(cmd.endsWith("'")){
+//                        output = cmd.replaceAll(" ", "");
+//                    }
+//                    System.out.println(output.replaceAll("\'",""));
+//                }else {
+//                    System.out.println(command.substring(5));
+//                }
             }
             else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
