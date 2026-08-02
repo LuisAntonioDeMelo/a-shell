@@ -77,7 +77,7 @@ public class RunShell {
         else {
             join = String.join("", words);
         }
-        return join;
+        return join.replaceAll("'","");
     }
 
     private Path cdMethod(String command, Path currentDirectory) {
