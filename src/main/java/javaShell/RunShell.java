@@ -33,68 +33,20 @@ public class RunShell {
                 // nao implementado
             }
             else if (command.startsWith("type")) {
-                String cmdSubtype = command.substring(5);
-                String output = "";
-
-                List<String> commands = Arrays.asList("type", "echo", "exit", "grep", "pwd", "cd");
-                boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(cmdSubtype));
-
-                if (!existComand) {
-                    for (int i = 0; i < pathDirs.length; i++) {
-                        File file = new File(pathDirs[i], cmdSubtype);
-                        if (file.exists() && file.canExecute()) {
-                            output = cmdSubtype + " is " + file.getAbsolutePath();
-                        }
-                    }
-                    if (output.isEmpty()) {
-                        output = cmdSubtype + ": not found";
-                    }
-                } else {
-                    output = cmdSubtype + " is a shell builtin";
-                }
-                System.out.println(output);
+                console(typeMethod(command, pathDirs));
             }
             else if (command.startsWith("echo")) {
-                String words[] = command.substring(5).split("'\'");
-                if(words.length < 2) {
-                    String sd[] = words[0].split(" ");
-                    List<String> ls =  new ArrayList<>();
-                    for(int i = 0; i < sd.length; i++) {
-                        if(sd[i]!=null && !sd[i].isEmpty()) {
-                            ls.add(sd[i]);
-                        }
-                    }
-                    System.out.println(ls.stream().collect(Collectors.joining(" ")));
-                }
-                else {
-                    String join = Arrays.stream(words).collect(Collectors.joining());
-                    System.out.println(join.replace("'", ""));
-                }
+                console(echoMethod(command));
             }
             else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
             }
             else if (command.startsWith("pwd")) {
                 System.out.println(currentDirectory);
+                console(currentDirectory.toString());
             }
             else if (command.equals("cd") || command.startsWith("cd")) {
-                String destination = command.equals("cd") ? System.getenv("HOME") : command.substring(3);
-                Path target = Paths.get(destination);
-                if (!target.isAbsolute()) {
-                    target = currentDirectory.resolve(target);
-                }
-                if(command.substring(3).equals("~")) {
-                    destination = System.getenv("HOME");
-                    target = Paths.get(destination);
-                    target = currentDirectory.resolve(target);
-                }
-                target = target.normalize();
-
-                if (Files.isDirectory(target)) {
-                    currentDirectory = target.toAbsolutePath();
-                } else {
-                    System.out.println("cd: " + destination + ": No such file or directory");
-                }
+                currentDirectory = cdMethod(command, currentDirectory);
             }
             else if (obterComandoPath(cmdArray[0]) != null) {
                 ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
@@ -104,12 +56,75 @@ public class RunShell {
                 process.waitFor();
             }
             else {
-                System.out.println(command + ": command not found");
+                console(command + ": command not found");
             }
         }
     }
 
-    private static String obterComandoPath(String command) {
+    private static String echoMethod(String command) {
+        String join = "";
+        String[] words = command.substring(5).split("'\'");
+        if(words.length < 2) {
+            String[] sd = words[0].split(" ");
+            List<String> ls =  new ArrayList<>();
+            for (String s : sd) {
+                if (s != null && !s.isEmpty()) {
+                    ls.add(s);
+                }
+            }
+            join = String.join(" ", ls);
+        }
+        else {
+            join = String.join("", words);
+        }
+        return join;
+    }
+
+    private Path cdMethod(String command, Path currentDirectory) {
+        String destination = command.equals("cd") ? System.getenv("HOME") : command.substring(3);
+        Path target = Paths.get(destination);
+        if (!target.isAbsolute()) {
+            target = currentDirectory.resolve(target);
+        }
+        if(command.substring(3).equals("~")) {
+            destination = System.getenv("HOME");
+            target = Paths.get(destination);
+            target = currentDirectory.resolve(target);
+        }
+        target = target.normalize();
+
+        if (Files.isDirectory(target)) {
+            currentDirectory = target.toAbsolutePath();
+        } else {
+            console("cd: " + destination + ": No such file or directory");
+        }
+        return currentDirectory;
+    }
+
+    private  String typeMethod(String command, String[] pathDirs) {
+        String cmdSubtype = command.substring(5);
+        String output = "";
+
+        List<String> commands = Arrays.asList("type", "echo", "exit", "grep", "pwd", "cd");
+        boolean existComand = commands.stream().anyMatch(cmd -> cmd.equals(cmdSubtype));
+
+        if (!existComand) {
+            for (String pathDir : pathDirs) {
+                File file = new File(pathDir, cmdSubtype);
+                if (file.exists() && file.canExecute()) {
+                    output = cmdSubtype + " is " + file.getAbsolutePath();
+                }
+            }
+            if (output.isEmpty()) {
+                output = cmdSubtype + ": not found";
+            }
+        } else {
+            output = cmdSubtype + " is a shell builtin";
+        }
+        return output;
+    }
+
+    private String obterComandoPath(String command) {
         String pathEvn = System.getenv("PATH");
         if (pathEvn == null) {
             return null;
@@ -122,6 +137,10 @@ public class RunShell {
             }
         }
         return null;
+    }
+
+    void console(String message) {
+        System.out.println(message);
     }
 
 }
