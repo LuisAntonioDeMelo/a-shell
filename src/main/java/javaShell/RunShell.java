@@ -54,11 +54,12 @@ public class RunShell {
             }
             else if (command.startsWith("echo")) {
                 String cmd = command.substring(5);
+                String output = "";
                 if(cmd.startsWith("'")) {
                     if(cmd.endsWith("'")){
-                        cmd.replaceAll(" ", "");
+                        output = cmd.replaceAll(" ", "");
                     }
-                    System.out.println(cmd.replaceAll("\'",""));
+                    System.out.println(output.replaceAll("\'",""));
                 }else {
                     System.out.println(command.substring(5));
                 }
