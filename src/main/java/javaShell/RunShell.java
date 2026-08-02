@@ -8,9 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class RunShell {
+
+    public static void run() throws Exception {
+        RunShell run = new RunShell();
+        run.start();
+    }
 
     public void start() throws  Exception {
         Scanner input = new Scanner(System.in);
