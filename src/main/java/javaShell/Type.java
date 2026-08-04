@@ -25,7 +25,7 @@ public enum Type {
     public String getType() {
         return type;
     }
-    // echo -n "banana blueberry." > "/tmp/bee/f   67"
+
     public List<String> getTypes() {
         return Arrays.stream(Type.values()).map(Type::getType).toList();
     }

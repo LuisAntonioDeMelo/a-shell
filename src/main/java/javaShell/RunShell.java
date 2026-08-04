@@ -18,10 +18,8 @@ public class RunShell {
 
     public void start() throws  Exception {
         Scanner input = new Scanner(System.in);
-        String path = System.getenv("PATH");
-        String[] pathDirs = path.split(File.pathSeparator);
+        String[] pathDirs = System.getenv("PATH").split(File.pathSeparator);
         Path currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
-
 
         while (true) {
             System.out.print("$ ");
@@ -53,6 +51,7 @@ public class RunShell {
                 currentDirectory = cdMethod(command, currentDirectory);
             }
             else if (obterComandoPath(cmdArray[0]) != null) {
+
                 ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
                 processBuilder.directory(currentDirectory.toFile());
                 Process process = processBuilder.start();
