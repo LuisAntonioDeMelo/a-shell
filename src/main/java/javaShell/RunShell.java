@@ -16,7 +16,7 @@ public class RunShell {
         run.start();
     }
 
-    public void start() throws  Exception {
+    public void start() throws Exception {
         Scanner input = new Scanner(System.in);
         String[] pathDirs = System.getenv("PATH").split(File.pathSeparator);
         Path currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
@@ -27,38 +27,29 @@ public class RunShell {
             String[] cmdArray = command.split(" ");
             if (command.equals("exit")) {
                 break;
-            }
-            else if (command.equals("help")) {
+            } else if (command.equals("help")) {
                 //nao implementado ainda
-            }
-            else if (command.equals("ls")) {
+            } else if (command.equals("ls")) {
                 // nao implementado
-            }
-            else if (command.startsWith("type")) {
+            } else if (command.startsWith("type")) {
                 console(typeMethod(command, pathDirs));
-            }
-            else if (command.startsWith("echo")) {
+            } else if (command.startsWith("echo")) {
                 console(echoMethod(command));
-            }
-            else if (command.startsWith("grep")) {
+            } else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
-            }
-            else if (command.startsWith("pwd")) {
+            } else if (command.startsWith("pwd")) {
                 System.out.println(currentDirectory);
                 console(currentDirectory.toString());
-            }
-            else if (command.equals("cd") || command.startsWith("cd")) {
+            } else if (command.equals("cd") || command.startsWith("cd")) {
                 currentDirectory = cdMethod(command, currentDirectory);
-            }
-            else if (obterComandoPath(cmdArray[0]) != null) {
-
+            } else if (obterComandoPath(cmdArray[0]) != null) {
+                parseCommand(command);
                 ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
                 processBuilder.directory(currentDirectory.toFile());
                 Process process = processBuilder.start();
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
-            }
-            else {
+            } else {
                 console(command + ": command not found");
             }
         }
@@ -67,20 +58,19 @@ public class RunShell {
     private static String echoMethod(String command) {
         String join = "";
         String[] words = command.substring(5).split("'\'");
-        if(words.length < 2) {
+        if (words.length < 2) {
             String[] sd = words[0].split(" ");
-            List<String> ls =  new ArrayList<>();
+            List<String> ls = new ArrayList<>();
             for (String s : sd) {
                 if (s != null && !s.isEmpty()) {
                     ls.add(s);
                 }
             }
             join = String.join(" ", ls);
-        }
-        else {
+        } else {
             join = String.join("", words);
         }
-        return join.replaceAll("'","");
+        return join.replaceAll("'", "");
     }
 
     private Path cdMethod(String command, Path currentDirectory) {
@@ -89,7 +79,7 @@ public class RunShell {
         if (!target.isAbsolute()) {
             target = currentDirectory.resolve(target);
         }
-        if(command.substring(3).equals("~")) {
+        if (command.substring(3).equals("~")) {
             destination = System.getenv("HOME");
             target = Paths.get(destination);
             target = currentDirectory.resolve(target);
@@ -104,7 +94,7 @@ public class RunShell {
         return currentDirectory;
     }
 
-    private  String typeMethod(String command, String[] pathDirs) {
+    private String typeMethod(String command, String[] pathDirs) {
         String cmdSubtype = command.substring(5);
         String output = "";
 
@@ -140,6 +130,30 @@ public class RunShell {
             }
         }
         return null;
+    }
+
+    private String[] parseCommand(String command) {
+        List<String> args = new ArrayList<>();
+        StringBuilder words = new StringBuilder();
+
+        boolean dentroDasAspas = false;
+
+        for (char c : command.toCharArray()) {
+            if (c == '\'') {
+                dentroDasAspas = true;
+            } else if (c == ' ' && !dentroDasAspas) {
+                if (!words.isEmpty()) {
+                    args.add(words.toString());
+                    words.setLength(0);
+                }
+            } else {
+                words.append(c);
+            }
+        }
+        if (!words.isEmpty()) {
+            args.add(words.toString());
+        }
+        return args.toArray(new String[0]);
     }
 
     void console(String message) {
