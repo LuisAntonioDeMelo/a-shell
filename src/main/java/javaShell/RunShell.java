@@ -38,7 +38,6 @@ public class RunShell {
             } else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
             } else if (command.startsWith("pwd")) {
-                System.out.println(currentDirectory);
                 console(currentDirectory.toString());
             } else if (command.equals("cd") || command.startsWith("cd")) {
                 currentDirectory = cdMethod(command, currentDirectory);
