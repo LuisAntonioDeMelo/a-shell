@@ -24,7 +24,7 @@ public class RunShell {
         while (true) {
             System.out.print("$ ");
             String command = input.nextLine();
-            String[] cmdArray = command.split(" ");
+            String[] cmdArray = parseCommand(command);
             if (command.equals("exit")) {
                 break;
             } else if (command.equals("help")) {
@@ -34,7 +34,7 @@ public class RunShell {
             } else if (command.startsWith("type")) {
                 console(typeMethod(command, pathDirs));
             } else if (command.startsWith("echo")) {
-                console(echoMethod(command));
+                console(echoMethod(cmdArray));
             } else if (command.startsWith("grep")) {
                 // System.out.println(command.substring(5));
             } else if (command.startsWith("pwd")) {
@@ -43,7 +43,6 @@ public class RunShell {
             } else if (command.equals("cd") || command.startsWith("cd")) {
                 currentDirectory = cdMethod(command, currentDirectory);
             } else if (obterComandoPath(cmdArray[0]) != null) {
-                parseCommand(command);
                 ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
                 processBuilder.directory(currentDirectory.toFile());
                 Process process = processBuilder.start();
@@ -55,22 +54,8 @@ public class RunShell {
         }
     }
 
-    private static String echoMethod(String command) {
-        String join = "";
-        String[] words = command.substring(5).split("'\'");
-        if (words.length < 2) {
-            String[] sd = words[0].split(" ");
-            List<String> ls = new ArrayList<>();
-            for (String s : sd) {
-                if (s != null && !s.isEmpty()) {
-                    ls.add(s);
-                }
-            }
-            join = String.join(" ", ls);
-        } else {
-            join = String.join("", words);
-        }
-        return join.replaceAll("'", "");
+    private static String echoMethod(String[] arguments) {
+        return String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
     }
 
     private Path cdMethod(String command, Path currentDirectory) {
@@ -137,20 +122,24 @@ public class RunShell {
         StringBuilder words = new StringBuilder();
 
         boolean dentroDasAspas = false;
+        boolean argumentoIniciado = false;
 
         for (char c : command.toCharArray()) {
             if (c == '\'') {
-                dentroDasAspas = true;
+                dentroDasAspas = !dentroDasAspas;
+                argumentoIniciado = true;
             } else if (c == ' ' && !dentroDasAspas) {
-                if (!words.isEmpty()) {
+                if (argumentoIniciado) {
                     args.add(words.toString());
                     words.setLength(0);
+                    argumentoIniciado = false;
                 }
             } else {
                 words.append(c);
+                argumentoIniciado = true;
             }
         }
-        if (!words.isEmpty()) {
+        if (argumentoIniciado) {
             args.add(words.toString());
         }
         return args.toArray(new String[0]);
