@@ -39,7 +39,7 @@ public class RunShell {
                 // System.out.println(command.substring(5));
             } else if (command.startsWith("pwd")) {
                 console(currentDirectory.toString());
-            } else if (command.equals("cd") || command.startsWith("cd")) {
+            } else if (command.startsWith("cd")) {
                 currentDirectory = cdMethod(command, currentDirectory);
             } else if (obterComandoPath(cmdArray[0]) != null) {
                 ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
@@ -120,20 +120,38 @@ public class RunShell {
         List<String> args = new ArrayList<>();
         StringBuilder words = new StringBuilder();
 
-        boolean dentroDasAspas = false;
+        boolean isAspas = false;
+        boolean isDoublequote = false;
         boolean argumentoIniciado = false;
+        //eu tenho a palvara hello world
+        // quando ei faco  c == ''
+        // o aspas fica como true
+        // e o argumento inciado  fica true tambem
 
+        //ae ele verifica se o espaço tem caractere se nao ele vai words
+        //assim eu vou montando a palavra
+        // se tiver espasso
+
+        // agora a questao e a seguinte
+        // quando temos 2 aspas
         for (char c : command.toCharArray()) {
             if (c == '\'') {
-                dentroDasAspas = !dentroDasAspas;
+                isAspas = !isAspas;
                 argumentoIniciado = true;
-            } else if (c == ' ' && !dentroDasAspas) {
+            }
+            else if(c == '\"' && !isDoublequote ) {
+                isDoublequote = !isDoublequote;
+                argumentoIniciado = true;
+            }
+            else if (c == ' ' && !isAspas && !isDoublequote) {
                 if (argumentoIniciado) {
                     args.add(words.toString());
                     words.setLength(0);
                     argumentoIniciado = false;
                 }
-            } else {
+            }
+
+            else {
                 words.append(c);
                 argumentoIniciado = true;
             }
