@@ -135,22 +135,17 @@ public class RunShell {
         // agora a questao e a seguinte
         // quando temos 2 aspas
         for (char c : command.toCharArray()) {
-            if (c == '\'') {
+            if (c == '\'' || c == '"') {
                 isAspas = !isAspas;
                 argumentoIniciado = true;
             }
-            else if(c == '\"' && !isDoublequote ) {
-                isDoublequote = !isDoublequote;
-                argumentoIniciado = true;
-            }
-            else if (c == ' ' && !isAspas && !isDoublequote) {
+            else if (c == ' ' && !isAspas) {
                 if (argumentoIniciado) {
                     args.add(words.toString());
                     words.setLength(0);
                     argumentoIniciado = false;
                 }
             }
-
             else {
                 words.append(c);
                 argumentoIniciado = true;
