@@ -122,22 +122,7 @@ public class RunShell {
 
         boolean argumentoIniciado = false;
         char isAspas = '\0';
-
-        //eu tenho a palvara hello world
-        // quando ei faco  c == ''
-        // o aspas fica como true
-        // e o argumento inciado  fica true tambem
-
-        //ae ele verifica se o espaço tem caractere se nao ele vai words
-        //assim eu vou montando a palavra
-        // se tiver espasso
-
-        // agora a questao e a seguinte
-        // quando temos 2 aspas segue a mesma logica porem as aspas unicas estaram presentes na palavra
-        // seria algo como words
         for (char c : command.toCharArray()) {
-            //se e dulpla ok
-            // se na words tem single e tem dupla, matem
             if (c == '\'' || c == '"') {
                 if(isAspas == '\0') {
                     isAspas = c;
@@ -172,5 +157,4 @@ public class RunShell {
     void console(String message) {
         System.out.println(message);
     }
-
 }
