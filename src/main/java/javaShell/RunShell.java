@@ -120,9 +120,9 @@ public class RunShell {
         List<String> args = new ArrayList<>();
         StringBuilder words = new StringBuilder();
 
-        boolean isAspas = false;
-        boolean isDoublequote = false;
         boolean argumentoIniciado = false;
+        char isAspas = '\0';
+
         //eu tenho a palvara hello world
         // quando ei faco  c == ''
         // o aspas fica como true
@@ -133,13 +133,25 @@ public class RunShell {
         // se tiver espasso
 
         // agora a questao e a seguinte
-        // quando temos 2 aspas
+        // quando temos 2 aspas segue a mesma logica porem as aspas unicas estaram presentes na palavra
+        // seria algo como words
         for (char c : command.toCharArray()) {
+            //se e dulpla ok
+            // se na words tem single e tem dupla, matem
             if (c == '\'' || c == '"') {
-                isAspas = !isAspas;
-                argumentoIniciado = true;
+                if(isAspas == '\0') {
+                    isAspas = c;
+                    argumentoIniciado = true;
+                }
+                else if(isAspas == c) {
+                    isAspas = '\0';
+                }
+                else {
+                    words.append(c);
+                    argumentoIniciado = true;
+                }
             }
-            else if (c == ' ' && !isAspas) {
+            else if (c == ' ' && isAspas == '\0') {
                 if (argumentoIniciado) {
                     args.add(words.toString());
                     words.setLength(0);
