@@ -10,11 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RunShell {
-     //
-    //quando a \ e usado fora das aspas ele age com uma escape
-    //entao para caractere tera um comportamento
-
-    //1 quando tiver \ cria um espaco
     public static void run() throws Exception {
         RunShell run = new RunShell();
         run.start();
@@ -127,9 +122,26 @@ public class RunShell {
         boolean argumentoIniciado = false;
         char tipoCaractere = '\0';
         char backSlash = '\\';
-        char contemBackSlash = '\0';
+        boolean comandoBackSlash = false;
         for (char c : command.toCharArray()) {
-            if (c == '\'' || c == '"') {
+            if(c == backSlash){
+                comandoBackSlash = true;
+            }
+            else if(comandoBackSlash) {
+                if(c == '\'') {
+                    words.append("'");
+                }
+                else if(c == '"') {
+                    words.append('\"');
+                }
+                else if(c == '\\') {
+                    words.append('\\');
+                }else {
+                    words.append(c);
+                }
+                comandoBackSlash = false;
+            }
+           else if (c == '\'' || c == '"') {
                 if(tipoCaractere == '\0') {
                     tipoCaractere = c;
                     argumentoIniciado = true;
@@ -148,10 +160,6 @@ public class RunShell {
                     words.setLength(0);
                     argumentoIniciado = false;
                 }
-            }
-            else if(c == backSlash){
-                contemBackSlash = c;
-                words.append(" ");
             }
             else {
                 words.append(c);
