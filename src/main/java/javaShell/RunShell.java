@@ -124,22 +124,14 @@ public class RunShell {
         char backSlash = '\\';
         boolean comandoBackSlash = false;
         for (char c : command.toCharArray()) {
-            if(c == backSlash){
-                comandoBackSlash = true;
-            }
-            else if(comandoBackSlash) {
-                if(c == '\'') {
-                    words.append("'");
-                }
-                else if(c == '"') {
-                    words.append('\"');
-                }
-                else if(c == '\\') {
-                    words.append('\\');
-                }else {
-                    words.append(c);
-                }
+            if(comandoBackSlash) {
+                words.append(c);
                 comandoBackSlash = false;
+                argumentoIniciado = true;
+            }
+            else if(c == backSlash){
+                comandoBackSlash = true;
+                argumentoIniciado = true;
             }
            else if (c == '\'' || c == '"') {
                 if(tipoCaractere == '\0') {
