@@ -128,7 +128,7 @@ public class RunShell {
                 words.append(c);
                 comandoBackSlash = false;
             }
-            else if(c == backSlash){
+            else if(c == backSlash && tipoCaractere != '\''){
                 comandoBackSlash = true;
                 argumentoIniciado = true;
             }
