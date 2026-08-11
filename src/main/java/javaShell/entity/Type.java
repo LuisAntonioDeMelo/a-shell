@@ -1,4 +1,4 @@
-package javaShell;
+package javaShell.entity;
 
 import java.util.Arrays;
 import java.util.List;
