@@ -1,6 +1,7 @@
 package javaShell;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +25,9 @@ public class RunShell {
             System.out.print("$ ");
             String command = input.nextLine();
             String[] cmdArray = parseCommand(command);
+            if (cmdArray.length != 0 && Arrays.stream(cmdArray).anyMatch(c-> c.equals(">") || c.equals("1>"))) {
+
+            }
             if (command.equals("exit")) {
                 break;
             } else if (command.equals("help")) {
@@ -41,15 +45,19 @@ public class RunShell {
             } else if (command.startsWith("cd")) {
                 currentDirectory = cdMethod(command, currentDirectory);
             } else if (obterComandoPath(cmdArray[0]) != null) {
-                ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
-                processBuilder.directory(currentDirectory.toFile());
-                Process process = processBuilder.start();
-                process.getInputStream().transferTo(System.out);
-                process.waitFor();
+                execute(cmdArray, currentDirectory);
             } else {
                 console(command + ": command not found");
             }
         }
+    }
+
+    private static void execute(String[] cmdArray, Path currentDirectory) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
+        processBuilder.directory(currentDirectory.toFile());
+        Process process = processBuilder.start();
+        process.getInputStream().transferTo(System.out);
+        process.waitFor();
     }
 
     private static String echoMethod(String[] arguments) {
