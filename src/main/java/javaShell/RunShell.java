@@ -127,7 +127,6 @@ public class RunShell {
             if(comandoBackSlash) {
                 words.append(c);
                 comandoBackSlash = false;
-                argumentoIniciado = true;
             }
             else if(c == backSlash){
                 comandoBackSlash = true;
