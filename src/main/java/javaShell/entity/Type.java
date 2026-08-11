@@ -1,32 +1,36 @@
 package javaShell.entity;
 
+import javaShell.strategy.CommandStrategy;
+
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 public enum Type {
-    CD("cd", ""),
-    ECHO("echo", ""),
-    PWD("pwd",""),
-    GREP("grep", ""),
-    TYPE("type", ""),;
+    EXIT("exit", CommandStrategy.exit()),
+    ECHO("echo", CommandStrategy.echo()),
+    TYPE("type", CommandStrategy.type()),
+    PWD("pwd", CommandStrategy.pwd()),
+    CD("cd", CommandStrategy.cd());
 
+    private final String commandName;
+    private final CommandStrategy strategy;
 
-    private String type;
-    private String description;
-
-    Type(String type, String description) {
-        this.type = type;
-        this.description = description;
+    Type(String commandName, CommandStrategy strategy) {
+        this.commandName = commandName;
+        this.strategy = strategy;
     }
 
-    private Type(String type) {
-        this.type = type;
-    }
-    public String getType() {
-        return type;
+    public String getCommandName() {
+        return commandName;
     }
 
-    public List<String> getTypes() {
-        return Arrays.stream(Type.values()).map(Type::getType).toList();
+    public CommandResult execute(Command command, java.nio.file.Path currentDirectory) {
+        return strategy.execute(command, currentDirectory);
+    }
+
+    public static Optional<Type> from(String commandName) {
+        return Arrays.stream(values())
+                .filter(type -> type.commandName.equals(commandName))
+                .findFirst();
     }
 }
